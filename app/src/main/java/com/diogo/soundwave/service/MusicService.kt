@@ -84,7 +84,7 @@ class MusicService(
     }
 */
     private fun dtoToArtist(dto: ArtistDto) : Artist {
-        return Artist(dto.id, dto.name, dto.picture, dto.nb_fan, dto.nb_album)
+        return Artist(dto.id, dto.name, dto.picture_xl, dto.nb_fan, dto.nb_album)
     }
 
     private fun dtoToTrack(dto: TrackDto) : Track {

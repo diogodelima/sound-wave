@@ -1,14 +1,11 @@
 package com.diogo.soundwave.api
 
-import com.diogo.soundwave.dto.VideoDto
 import com.google.gson.Gson
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
 
 class YouTubeApi(
 
@@ -20,8 +17,8 @@ class YouTubeApi(
 
         private val YOUTUBE_API_KEY: String
             get() {
-                val url = ClassLoader.getSystemResource("youtube_web_api_key.txt")
-                BufferedReader(InputStreamReader(url.openStream())).use { return it.readLine() }
+                val url = this.javaClass.classLoader?.getResourceAsStream("youtube_web_api_key.txt")
+                BufferedReader(InputStreamReader(url)).use { return it.readLine() }
             }
 
         private const val YOUTUBE = "https://www.googleapis.com/youtube/v3/search?part=snippet"

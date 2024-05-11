@@ -37,7 +37,9 @@ fun trackScreen(track: Track){
 
     Column(
         modifier = Modifier
-            .background(color = background)
+            .background(color = background),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
         Row(
@@ -73,16 +75,13 @@ fun trackScreen(track: Track){
 
         }
 
-        Box(
+        AsyncImage(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-        ) {
-            AsyncImage(
-                model = artist.picture,
-                contentDescription = "Artist Image"
-            )
-        }
+                .size(300.dp)
+                .padding(vertical = 30.dp),
+            model = artist.picture,
+            contentDescription = "Artist Image"
+        )
 
     }
 
