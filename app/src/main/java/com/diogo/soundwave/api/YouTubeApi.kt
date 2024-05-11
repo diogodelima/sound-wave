@@ -20,7 +20,8 @@ class YouTubeApi(
 
         private val YOUTUBE_API_KEY: String
             get() {
-                return "AIzaSyA_jvyZOCH4BUsXfwcTkA2TuGEUszbkqRQ"
+                val url = ClassLoader.getSystemResource("youtube_web_api_key.txt")
+                BufferedReader(InputStreamReader(url.openStream())).use { return it.readLine() }
             }
 
         private const val YOUTUBE = "https://www.googleapis.com/youtube/v3/search?part=snippet"
