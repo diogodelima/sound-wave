@@ -21,7 +21,9 @@ class DeezerApi(
 
         private const val SEARCH_ARTIST = "${DEEZER}search/artist?q=%s&index=%d"
 
-        private const val SEARCH_TRACK = "${DEEZER}search/track?q=%s&index=%d"
+        private const val SEARCH_TRACK_BY_NAME = "${DEEZER}search/track?q=%s&index=%d"
+
+        private const val SEARCH_TRACK_BY_ID = "${DEEZER}track/%s"
 
     }
 
@@ -57,9 +59,25 @@ class DeezerApi(
 
     }
 
-    fun searchTrack(trackName: String, page: Int) : List<TrackDto> {
+    fun searchTrackByName(trackName: String, page: Int) : List<TrackDto> {
 
-        val url = URL(String.format(SEARCH_TRACK, trackName, page))
+        val url = URL(String.format(SEARCH_TRACK_BY_NAME, trackName, page))
+
+        with(url.openConnection() as HttpURLConnection){
+
+            BufferedReader(InputStreamReader(inputStream)).use {
+
+                val searchTopTrack = gson.fromJson(it, SearchTrackDto::class.java)
+                return searchTopTrack.data
+            }
+
+        }
+
+    }
+
+    fun searchTrackById(trackId: String, page: Int) : List<TrackDto> {
+
+        val url = URL(String.format(SEARCH_TRACK_BY_ID, trackId, page))
 
         with(url.openConnection() as HttpURLConnection){
 

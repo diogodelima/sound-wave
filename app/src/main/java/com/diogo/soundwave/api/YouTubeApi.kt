@@ -1,11 +1,16 @@
 package com.diogo.soundwave.api
 
+import com.diogo.soundwave.dto.SearchVideoDto
+import com.diogo.soundwave.dto.VideoDto
+import com.diogo.soundwave.model.Player
 import com.google.gson.Gson
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 class YouTubeApi(
 
@@ -27,7 +32,7 @@ class YouTubeApi(
 
     }
 
-    /*fun searchVideo(trackName: String, artistName: String, maxResults: Int) : List<VideoDto> {
+    fun searchVideo(trackName: String, artistName: String, maxResults: Int) : List<VideoDto> {
 
         val url = URL(String.format(SEARCH_VIDEO, "$trackName+$artistName", maxResults))
 
@@ -41,23 +46,10 @@ class YouTubeApi(
 
         }
 
-    }*/
+    }
 
-    fun playVideo(youTubePlayerView: YouTubePlayerView, videoId: String){
-
-        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-
-            override fun onReady(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.setVolume(100)
-                youTubePlayer.loadVideo(videoId, 0f)
-            }
-
-            override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-
-            }
-
-        })
-
+    fun init(youTubePlayerView: YouTubePlayerView, player: Player){
+        youTubePlayerView.addYouTubePlayerListener(player)
     }
 
 }

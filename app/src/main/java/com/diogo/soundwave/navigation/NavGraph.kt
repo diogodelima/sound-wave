@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.diogo.soundwave.model.Player
 import com.diogo.soundwave.model.Track
 import com.diogo.soundwave.screen.HomeScreen
 import com.diogo.soundwave.screen.trackScreen
@@ -15,7 +16,8 @@ import kotlinx.coroutines.*
 @Composable
 fun setupNavGraph(
     navController: NavHostController,
-    service: MusicService
+    service: MusicService,
+    player: Player
 ){
 
     NavHost(
@@ -46,14 +48,14 @@ fun setupNavGraph(
 
             LaunchedEffect(Unit) {
                 trackRemember.value = withContext(Dispatchers.IO) {
-                    service.searchTrack(trackName, Int.MAX_VALUE).firstOrNull()
+                    service.searchTrackByName(trackName, Int.MAX_VALUE).firstOrNull()
                 }
             }
 
             val track = trackRemember.value
 
             if (track != null)
-                trackScreen(track)
+                trackScreen(track, player)
 
         }
 

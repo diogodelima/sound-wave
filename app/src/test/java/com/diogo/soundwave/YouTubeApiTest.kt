@@ -9,11 +9,11 @@ class YouTubeApiTest {
     @Test
     fun searchTrackFromDrakeTest(){
 
-        /*val api = YouTubeApi()
+        val api = YouTubeApi()
         val video = api.searchVideo("Best+I+Ever+Had", "Drake", 1)[0]
         val expected = "VideoDto(id=VideoIdDto(kind=youtube#video, videoId=Zfp3KfYH0xA))"
 
-        assertEquals(expected, video.toString())*/
+        assertEquals(expected, video.toString())
     }
 
 }

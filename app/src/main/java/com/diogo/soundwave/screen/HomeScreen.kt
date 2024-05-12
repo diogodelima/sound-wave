@@ -17,7 +17,7 @@ fun HomeScreen(
         }
     ){
         Text(
-            text = "Farda - Gson"
+            text = "One Dance - Drake"
         )
     }
 

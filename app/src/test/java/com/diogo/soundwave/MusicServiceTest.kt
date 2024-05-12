@@ -15,7 +15,7 @@ class MusicServiceTest{
 
     @Test
     fun searchTrack(){
-        val track = service.searchTrack("Farda", 1).first()
+        val track = service.searchTrack("Grito", 1).first()
         println(track.toString())
         println(track.artist().toString())
     }

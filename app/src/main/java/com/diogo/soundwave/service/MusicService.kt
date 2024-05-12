@@ -27,13 +27,29 @@ class MusicService(
             .take(maxItems)
     }
 
-    fun searchTrack(trackName: String, maxItems: Int) : Sequence<Track> {
+    fun searchTrackByName(trackName: String, maxItems: Int) : Sequence<Track> {
         return generateSequence(0) { n -> n + 1}
-            .map { deezerApi.searchTrack(trackName, it) }
+            .map { deezerApi.searchTrackByName(trackName, it) }
             .takeWhile { it.isNotEmpty() }
             .flatMap { it }
             .map(::dtoToTrack)
             .take(maxItems)
+    }
+
+    fun initYouTube(youTubePlayerView: YouTubePlayerView, player: Player){
+        youtubeApi.init(youTubePlayerView, player)
+    }
+
+    fun searchVideo(trackName: String, artistName: String) : () -> Video {
+        return {
+            dtoToVideo(
+                youtubeApi.searchVideo(
+                    trackName.replace(" ", "+"),
+                    artistName.replace(" ", "+"),
+                    1
+                )[0]
+            )
+        }
     }
 
 /*    fun searchTopArtistsByCountry(country: String, maxItems: Int) : Sequence<Artist> {
@@ -67,21 +83,6 @@ class MusicService(
             .map(::dtoToAlbum)
     }
 
-    fun searchVideo(trackName: String, artistName: String) : () -> Video {
-        return {
-            dtoToVideo(
-                youtubeApi.searchVideo(
-                    trackName.replace(" ", "+"),
-                    artistName.replace(" ", "+"),
-                    1
-                )[0]
-            )
-        }
-    }
-
-    fun playVideo(youTubePlayerView: YouTubePlayerView, video: Video){
-        youtubeApi.playVideo(youTubePlayerView, video.id)
-    }
 */
     private fun dtoToArtist(dto: ArtistDto) : Artist {
         return Artist(dto.id, dto.name, dto.picture_xl, dto.nb_fan, dto.nb_album)
@@ -92,6 +93,11 @@ class MusicService(
             searchArtist(dto.artist.id)
         }
     }
+
+    private fun dtoToVideo(dto: VideoDto) : Video {
+        return Video(dto.id.kind, dto.id.videoId)
+    }
+
 /*
     private fun dtoToAlbum(dto: AlbumDto) : Album {
         return Album(dto.name, dto.playCount, dto.url, dto.image
@@ -113,9 +119,6 @@ class MusicService(
         }
 
     }
-
-    private fun dtoToVideo(dto: VideoDto) : Video {
-        return Video(dto.id.kind, dto.id.videoId)
-    }*/
+*/
 
 }

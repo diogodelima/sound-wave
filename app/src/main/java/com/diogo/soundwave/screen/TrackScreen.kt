@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -13,17 +14,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.diogo.soundwave.model.Artist
+import com.diogo.soundwave.model.Player
 import com.diogo.soundwave.model.Track
 import com.diogo.soundwave.ui.theme.background
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun trackScreen(track: Track){
+fun trackScreen(track: Track, player: Player){
 
     val artistRemember = remember { mutableStateOf<Artist?>(null) }
 
@@ -61,7 +64,9 @@ fun trackScreen(track: Track){
 
             Text(
                 text = artist.name,
-                color = Color.White
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
             )
 
             IconButton(
@@ -83,17 +88,49 @@ fun trackScreen(track: Track){
             contentDescription = "Artist Image"
         )
 
+        Box(
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        ){
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Column {
+
+                    Text(
+                        text = track.name,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp
+                    )
+
+                    Text(
+                        text = artist.name,
+                        color = Color.White,
+                        fontSize = 20.sp
+                    )
+
+                }
+
+                IconButton(
+                    onClick = {}
+                ){
+                    Icon(
+                        Icons.Rounded.FavoriteBorder, contentDescription = "Favourite Border",
+                        tint = Color.White
+                    )
+                }
+
+            }
+
+        }
+
     }
 
-}
-
-@Preview(showBackground = true)
-@Composable
-fun trackScreenPreview(){
-
-    val track = Track("asdasdasd", "Marfim", "asdasdasd") {
-        Artist("123123", "xtinto", "asdasd", 1000, 102)
-    }
-
-    trackScreen(track)
 }
