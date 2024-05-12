@@ -38,8 +38,6 @@ data class Player (
 
     fun play(track: Track){
 
-        while (!::youTubePlayer.isInitialized){}
-
         if (this.track?.id == track.id && state != PlayerConstants.PlayerState.PLAYING){
             this.youTubePlayer.play()
             return

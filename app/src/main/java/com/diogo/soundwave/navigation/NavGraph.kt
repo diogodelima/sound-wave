@@ -34,15 +34,11 @@ fun setupNavGraph(
         composable(
             route = Screen.Track.route,
             arguments = listOf(
-                navArgument(ARTIST_NAME){
-                    type = NavType.StringType
-                },
                 navArgument(TRACK_NAME){
                     type = NavType.StringType
                 }
             )
         ){
-            val artistName = it.arguments?.getString(ARTIST_NAME)!!
             val trackName = it.arguments?.getString(TRACK_NAME)!!
             val trackRemember = remember { mutableStateOf<Track?>(null) }
 

@@ -13,7 +13,7 @@ fun HomeScreen(
 
     TextButton(
         onClick = {
-            navController.navigate(Screen.Track.route("Gson", "Farda"))
+            navController.navigate(Screen.Track.route("3,14"))
         }
     ){
         Text(

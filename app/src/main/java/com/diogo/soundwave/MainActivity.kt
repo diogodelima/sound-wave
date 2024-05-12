@@ -2,6 +2,7 @@ package com.diogo.soundwave
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -41,15 +42,18 @@ class MainActivity : ComponentActivity() {
 
                     service.initYouTube(youTubePlayerView, player)
 
-                    navController = rememberNavController()
-                    setupNavGraph(navController, service, player)
-
                     LaunchedEffect(Unit) {
                         withContext(Dispatchers.IO) {
-                            val track = service.searchTrackByName("Farda", 1).first()
+
+                            while (!player.isInitializated()){}
+
+                            val track = service.searchTrackByName("3,14", 1).first()
                             player.play(track)
                         }
                     }
+
+                    navController = rememberNavController()
+                    setupNavGraph(navController, service, player)
 
                 }
 

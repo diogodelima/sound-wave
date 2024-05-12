@@ -24,10 +24,9 @@ import com.diogo.soundwave.model.Player
 import com.diogo.soundwave.model.Track
 import com.diogo.soundwave.screen.components.MusicBar
 import com.diogo.soundwave.ui.theme.playButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun trackScreen(track: Track, player: Player){
 
@@ -198,17 +197,34 @@ fun trackScreen(track: Track, player: Player){
 
             IconButton(
                 modifier = Modifier
+                    .size(40.dp),
+                onClick = {}
+            ){
+                Icon(
+                    modifier = Modifier
+                        .size(40.dp),
+                    painter = painterResource(R.drawable.skip_previous),
+                    contentDescription = "Favourite Border",
+                    tint = Color.White
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(horizontal = 10.dp))
+
+            IconButton(
+                modifier = Modifier
                     .size(80.dp),
                 onClick = {
-
-                    if (!player.isInitializated())
-                        return@IconButton
 
                     isPlaying = !isPlaying
 
                     if (isPlaying)
                         player.youTubePlayer.pause()
-                    else player.play(track)
+                    else {
+                        GlobalScope.launch {
+                            player.play(track)
+                        }
+                    }
 
                 }
             ){
@@ -218,6 +234,22 @@ fun trackScreen(track: Track, player: Player){
                     painter = if (!isPlaying) painterResource(R.drawable.pause_icon) else painterResource(R.drawable.play_icon),
                     contentDescription = if (isPlaying) "Pause" else "Play",
                     tint = playButton
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(horizontal = 10.dp))
+
+            IconButton(
+                modifier = Modifier
+                    .size(40.dp),
+                onClick = {}
+            ){
+                Icon(
+                    modifier = Modifier
+                        .size(40.dp),
+                    painter = painterResource(R.drawable.skip_next),
+                    contentDescription = "Favourite Border",
+                    tint = Color.White
                 )
             }
 
