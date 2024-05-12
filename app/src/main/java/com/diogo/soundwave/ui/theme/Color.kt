@@ -11,3 +11,5 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val background = Color(0XFF2B2B2C)
+val musicBarBackground = Color(0XFF545458)
+val musicBar = Color(0XFFCFCFCF)

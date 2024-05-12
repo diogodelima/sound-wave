@@ -13,11 +13,11 @@ fun HomeScreen(
 
     TextButton(
         onClick = {
-            navController.navigate(Screen.Track.route("Drake", "One Dance"))
+            navController.navigate(Screen.Track.route("Gson", "Farda"))
         }
     ){
         Text(
-            text = "One Dance - Drake"
+            text = "Farda - Gson"
         )
     }
 

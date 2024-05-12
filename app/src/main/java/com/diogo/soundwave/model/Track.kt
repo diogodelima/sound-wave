@@ -5,6 +5,7 @@ data class Track(
     val id: String,
     val name: String,
     val image: String,
+    val duration: Float,
     val artist: () -> Artist
 
 )

@@ -39,12 +39,12 @@ data class Player (
         this.youTubePlayer.loadVideo(service.searchVideo(trackName, artistName)().id, this.currentSecond)
     }
 
-    fun getCurrentSecond(track: Track) : Int {
+    fun getCurrentSecond(track: Track) : Float {
 
         if (track.name == this.track?.name && track.artist().name == this.track?.artist!!().name)
-            return this.currentSecond.toInt()
+            return this.currentSecond
 
-        return 0
+        return 0f
     }
 
 }

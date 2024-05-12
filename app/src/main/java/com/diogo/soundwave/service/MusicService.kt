@@ -89,7 +89,7 @@ class MusicService(
     }
 
     private fun dtoToTrack(dto: TrackDto) : Track {
-        return Track(dto.id, dto.title_short, dto.md5_image) {
+        return Track(dto.id, dto.title_short, dto.md5_image, dto.duration) {
             searchArtist(dto.artist.id)
         }
     }
