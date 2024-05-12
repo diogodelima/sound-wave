@@ -4,13 +4,19 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.diogo.soundwave.model.Player
 import com.diogo.soundwave.navigation.setupNavGraph
 import com.diogo.soundwave.service.MusicService
 import com.diogo.soundwave.ui.theme.SoundWaveTheme
+import com.diogo.soundwave.ui.theme.background
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.coroutines.*
 
@@ -24,19 +30,27 @@ class MainActivity : ComponentActivity() {
         setContent {
             SoundWaveTheme {
 
-                val youTubePlayerView = YouTubePlayerView(this)
-                val player = Player(service)
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(background)
+                ) {
 
-                service.initYouTube(youTubePlayerView, player)
+                    val youTubePlayerView = YouTubePlayerView(this)
+                    val player = Player(service)
 
-                navController = rememberNavController()
-                setupNavGraph(navController, service, player)
+                    service.initYouTube(youTubePlayerView, player)
 
-                LaunchedEffect(Unit) {
-                    withContext(Dispatchers.IO) {
-                        player.track = service.searchTrackByName("Farda", 1).first()
-                        player.play()
+                    navController = rememberNavController()
+                    setupNavGraph(navController, service, player)
+
+                    LaunchedEffect(Unit) {
+                        withContext(Dispatchers.IO) {
+                            val track = service.searchTrackByName("Farda", 1).first()
+                            player.play(track)
+                        }
                     }
+
                 }
 
             }

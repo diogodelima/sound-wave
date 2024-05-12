@@ -19,7 +19,7 @@ class DeezerApiTest {
     @Test
     fun searchTrackTest(){
 
-        val actual = api.searchTrack("Farda", 0).first()
+        val actual = api.searchTrackByName("Farda", 0).first()
 
         println(actual.toString())
     }

@@ -1,13 +1,10 @@
 package com.diogo.soundwave.screen
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.MoreVert
-import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -16,20 +13,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.diogo.soundwave.R
 import com.diogo.soundwave.model.Artist
 import com.diogo.soundwave.model.Player
 import com.diogo.soundwave.model.Track
 import com.diogo.soundwave.screen.components.MusicBar
-import com.diogo.soundwave.ui.theme.background
+import com.diogo.soundwave.ui.theme.playButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import okhttp3.internal.wait
 
 @Composable
 fun trackScreen(track: Track, player: Player){
@@ -39,10 +36,14 @@ fun trackScreen(track: Track, player: Player){
 
     LaunchedEffect(Unit) {
         artistRemember.value = withContext(Dispatchers.IO) {
-            track.artist()
+            track.getArtist()
         }
         withContext(Dispatchers.IO){
             while (true){
+
+                if (!player.isPlaying(track))
+                    continue
+
                 seconds = player.getCurrentSecond(track)
                 delay(100)
             }
@@ -50,10 +51,9 @@ fun trackScreen(track: Track, player: Player){
     }
 
     val artist = artistRemember.value ?: return
+    var isPlaying by remember { mutableStateOf(player.isPlaying(track)) }
 
     Column(
-        modifier = Modifier
-            .background(color = background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -172,7 +172,7 @@ fun trackScreen(track: Track, player: Player){
                 ) {
 
                     Text(
-                        text = formatSeconds(seconds),
+                        text = if (seconds > track.duration) formatSeconds(track.duration) else formatSeconds(seconds),
                         color = Color.White,
                         fontSize = 12.sp,
                     )
@@ -185,6 +185,40 @@ fun trackScreen(track: Track, player: Player){
 
                 }
 
+            }
+
+        }
+
+        Row(
+            modifier = Modifier
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround,
+        ) {
+
+            IconButton(
+                modifier = Modifier
+                    .size(80.dp),
+                onClick = {
+
+                    if (!player.isInitializated())
+                        return@IconButton
+
+                    isPlaying = !isPlaying
+
+                    if (isPlaying)
+                        player.youTubePlayer.pause()
+                    else player.play(track)
+
+                }
+            ){
+                Icon(
+                    modifier = Modifier
+                        .size(80.dp),
+                    painter = if (!isPlaying) painterResource(R.drawable.pause_icon) else painterResource(R.drawable.play_icon),
+                    contentDescription = if (isPlaying) "Pause" else "Play",
+                    tint = playButton
+                )
             }
 
         }

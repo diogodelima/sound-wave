@@ -6,6 +6,19 @@ data class Track(
     val name: String,
     val image: String,
     val duration: Float,
-    val artist: () -> Artist
+    val supArtist: () -> Artist
 
-)
+){
+
+    private lateinit var artist: Artist
+
+    fun getArtist() : Artist {
+
+        if(::artist.isInitialized)
+            return this.artist
+
+        this.artist = supArtist()
+        return this.artist
+    }
+
+}
