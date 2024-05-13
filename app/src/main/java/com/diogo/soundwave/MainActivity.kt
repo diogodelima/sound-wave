@@ -43,10 +43,10 @@ class MainActivity : ComponentActivity() {
                     service.initYouTube(youTubePlayerView, player)
 
                     LaunchedEffect(Unit) {
+
+                        player.playerTrack.waitUntilInitialized()
+
                         withContext(Dispatchers.IO) {
-
-                            while (!player.isInitializated()){}
-
                             val track = service.searchTrackByName("3,14", 1).first()
                             player.play(track)
                         }

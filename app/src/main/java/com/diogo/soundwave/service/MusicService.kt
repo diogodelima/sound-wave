@@ -36,6 +36,13 @@ class MusicService(
             .take(maxItems)
     }
 
+    fun searchTrackById(trackId: String, maxItems: Int) : Sequence<Track> {
+        return generateSequence(0) { n -> n + 1}
+            .map { deezerApi.searchTrackById(trackId) }
+            .map(::dtoToTrack)
+            .take(maxItems)
+    }
+
     fun initYouTube(youTubePlayerView: YouTubePlayerView, player: Player){
         youtubeApi.init(youTubePlayerView, player)
     }
@@ -59,11 +66,6 @@ class MusicService(
             .flatMap { it }
             .map(::dtoToArtist)
             .take(maxItems)
-    }
-
-     fun searchTrack(artistName: String, trackName: String, maxItems: Int) : Sequence<Track> {
-        return searchTracks(artistName, maxItems)
-            .filter { track -> track.name == trackName }
     }
 
     private fun searchTracks(artistName: String, maxItems: Int) : Sequence<Track> {

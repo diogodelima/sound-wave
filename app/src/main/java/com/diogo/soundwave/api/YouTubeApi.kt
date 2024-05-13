@@ -49,7 +49,7 @@ class YouTubeApi(
     }
 
     fun init(youTubePlayerView: YouTubePlayerView, player: Player){
-        youTubePlayerView.addYouTubePlayerListener(player)
+        youTubePlayerView.addYouTubePlayerListener(player.playerTrack)
     }
 
 }

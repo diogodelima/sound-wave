@@ -34,17 +34,17 @@ fun setupNavGraph(
         composable(
             route = Screen.Track.route,
             arguments = listOf(
-                navArgument(TRACK_NAME){
+                navArgument(TRACK_ID){
                     type = NavType.StringType
                 }
             )
         ){
-            val trackName = it.arguments?.getString(TRACK_NAME)!!
+            val trackId = it.arguments?.getString(TRACK_ID)!!
             val trackRemember = remember { mutableStateOf<Track?>(null) }
 
             LaunchedEffect(Unit) {
                 trackRemember.value = withContext(Dispatchers.IO) {
-                    service.searchTrackByName(trackName, Int.MAX_VALUE).firstOrNull()
+                    service.searchTrackById(trackId, Int.MAX_VALUE).firstOrNull()
                 }
             }
 

@@ -9,6 +9,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,27 +31,17 @@ import kotlinx.coroutines.*
 @Composable
 fun trackScreen(track: Track, player: Player){
 
-    var seconds by remember { mutableFloatStateOf(0f) }
+    val playerTrack by player.playerTrack.playerTrackData.observeAsState()
     val artistRemember = remember { mutableStateOf<Artist?>(null) }
 
     LaunchedEffect(Unit) {
+
         artistRemember.value = withContext(Dispatchers.IO) {
             track.getArtist()
-        }
-        withContext(Dispatchers.IO){
-            while (true){
-
-                if (!player.isPlaying(track))
-                    continue
-
-                seconds = player.getCurrentSecond(track)
-                delay(100)
-            }
         }
     }
 
     val artist = artistRemember.value ?: return
-    var isPlaying by remember { mutableStateOf(player.isPlaying(track)) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -156,11 +147,13 @@ fun trackScreen(track: Track, player: Player){
 
             Column {
 
-                MusicBar(
-                    width = width.intValue.dp,
-                    indicatorValue = seconds,
-                    maxIndicatorValue = track.duration
-                )
+                playerTrack?.getCurrentSecond(track)?.let {
+                    MusicBar(
+                        width = width.intValue.dp,
+                        indicatorValue = it,
+                        maxIndicatorValue = track.duration
+                    )
+                }
 
                 Row(
                     modifier = Modifier
@@ -170,11 +163,15 @@ fun trackScreen(track: Track, player: Player){
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 
-                    Text(
-                        text = if (seconds > track.duration) formatSeconds(track.duration) else formatSeconds(seconds),
-                        color = Color.White,
-                        fontSize = 12.sp,
-                    )
+                    playerTrack?.getCurrentSecond(track)?.let {
+
+                        Text(
+                            text = if (it > track.duration) formatSeconds(track.duration) else formatSeconds(it),
+                            color = Color.White,
+                            fontSize = 12.sp,
+                        )
+
+                    }
 
                     Text(
                         text = formatSeconds(track.duration),
@@ -216,10 +213,11 @@ fun trackScreen(track: Track, player: Player){
                     .size(80.dp),
                 onClick = {
 
-                    isPlaying = !isPlaying
+                    if (!player.playerTrack.isInitializated())
+                        return@IconButton
 
-                    if (isPlaying)
-                        player.youTubePlayer.pause()
+                    if (playerTrack?.isPlaying(track) == true)
+                        player.playerTrack.youTubePlayer.pause()
                     else {
                         GlobalScope.launch {
                             player.play(track)
@@ -231,8 +229,8 @@ fun trackScreen(track: Track, player: Player){
                 Icon(
                     modifier = Modifier
                         .size(80.dp),
-                    painter = if (!isPlaying) painterResource(R.drawable.pause_icon) else painterResource(R.drawable.play_icon),
-                    contentDescription = if (isPlaying) "Pause" else "Play",
+                    painter = if (playerTrack?.isPlaying(track) == true) painterResource(R.drawable.pause_icon) else painterResource(R.drawable.play_icon),
+                    contentDescription = if (playerTrack?.isPlaying(track) == true) "Pause" else "Play",
                     tint = playButton
                 )
             }

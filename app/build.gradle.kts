@@ -48,6 +48,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.compose.runtime:runtime-livedata:1.0.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")

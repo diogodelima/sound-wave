@@ -1,6 +1,6 @@
 package com.diogo.soundwave.navigation
 
-const val TRACK_NAME = "track_name"
+const val TRACK_ID = "track_id"
 
 sealed class Screen(
 
@@ -9,11 +9,11 @@ sealed class Screen(
 ) {
 
     data object Home: Screen("home")
-    data object Track: Screen("track/{$TRACK_NAME}"){
+    data object Track: Screen("track/{$TRACK_ID}"){
 
-        fun route(trackName: String) : String {
+        fun route(trackId: String) : String {
             return this.route
-                .replace("{$TRACK_NAME}", trackName)
+                .replace("{$TRACK_ID}", trackId)
         }
 
     }
